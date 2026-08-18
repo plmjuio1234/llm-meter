@@ -14,7 +14,7 @@ namespace LLMMeter.App;
 public sealed partial class MainWindow : Window
 {
     public DashboardViewModel ViewModel { get; } = new();
-    public DispatcherQueue DispatcherQueue => ContentRoot.DispatcherQueue;
+    public new DispatcherQueue DispatcherQueue => ContentRoot.DispatcherQueue;
     internal IntPtr WindowHandle => windowHandle;
 
     private readonly IntPtr windowHandle;
