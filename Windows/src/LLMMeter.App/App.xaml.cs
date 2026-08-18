@@ -17,6 +17,7 @@ public partial class App : Application
         MainWindowInstance = new MainWindow();
         MainWindowInstance.Closed += MainWindow_Closed;
         trayIcon = new TrayIconController(
+            MainWindowInstance.WindowHandle,
             ToggleMainWindow,
             ExitApplication);
         MainWindowInstance.Activate();
