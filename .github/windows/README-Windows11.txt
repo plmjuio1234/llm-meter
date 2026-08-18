@@ -7,15 +7,14 @@ LLM Meter Windows 11 preview
    powershell -ExecutionPolicy Bypass -File .\Install-LLMMeter.ps1
 
 The package is signed with the included test certificate so it can be
-installed for local evaluation. This is not a Microsoft Store or Developer ID
-certificate. The dashboard and widget provider are separate MSIX packages and
-both are installed by the script.
+installed for local evaluation. This is not a Microsoft Store or production
+certificate.
 
 After installation:
 
-- Launch "LLM Meter" from the Start menu.
-- Open the Windows 11 Widgets Board with Win+W.
-- Add the "LLM Meter" widget.
+- LLM Meter starts in the taskbar notification area's hidden-icons menu.
+- Click the LLM Meter tray icon to show or hide the dashboard.
+- Right-click the tray icon and choose Exit to stop the app.
 
 This preview reads the checked-in sanitized fixture and mirrors it to
 %LocalAppData%\LLMMeter\usage-snapshot.json. Provider OAuth and API-key

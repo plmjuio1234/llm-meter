@@ -9,9 +9,10 @@ account freshness across multiple accounts.
 
 ## Current status
 
-- Release: `v1.0.0`
+- macOS release: `v1.0.0`
+- Windows preview: `v1.1.0-windows11-preview`
 - Platform: macOS 14+ and Windows 11
-- Windows support: WinUI 3 dashboard and Windows Widgets provider
+- Windows support: WinUI 3 dashboard with a notification-area tray app
 - Provider access: official APIs only
 
 ## Features
@@ -67,8 +68,9 @@ launch.
 ## Windows 11
 
 The Windows port lives under [`Windows/`](Windows/). It uses WinUI 3 for the
-dashboard and a packaged Win32 Windows Widgets provider for the compact
-surface. Both consume a credential-free normalized snapshot projection.
+dashboard and stays resident in the Windows 11 taskbar notification area.
+Click the hidden tray icon to show or hide the dashboard. It consumes a
+credential-free normalized snapshot projection.
 
 See [`Windows/README.md`](Windows/README.md) for Windows 11 prerequisites and
 build commands.

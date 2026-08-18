@@ -71,20 +71,6 @@ jobs:
             /p:PackageCertificateThumbprint="$env:PACKAGE_CERT_THUMBPRINT" `
             /p:AppxPackageDir="$env:ARTIFACT_ROOT\App\"
 
-      - name: Build packaged widget provider
-        shell: pwsh
-        run: |
-          msbuild Windows/src/LLMMeter.WidgetProvider/LLMMeter.WidgetProvider.csproj `
-            /restore `
-            /t:Build `
-            /p:Configuration=$env:CONFIGURATION `
-            /p:Platform=$env:PLATFORM `
-            /p:GenerateAppxPackageOnBuild=true `
-            /p:WindowsAppSDKSelfContained=true `
-            /p:AppxPackageSigningEnabled=true `
-            /p:PackageCertificateThumbprint="$env:PACKAGE_CERT_THUMBPRINT" `
-            /p:AppxPackageDir="$env:ARTIFACT_ROOT\WidgetProvider\"
-
       - name: Assemble installable Windows bundle
         shell: pwsh
         run: |
@@ -94,8 +80,8 @@ jobs:
 
           $packages = Get-ChildItem -Path $artifactRoot -Recurse -File |
             Where-Object { $_.Extension -in ".msix", ".msixbundle", ".appx", ".appxbundle" }
-          if ($packages.Count -lt 2) {
-            throw "Expected dashboard and widget provider packages, found $($packages.Count)."
+          if ($packages.Count -lt 1) {
+            throw "Expected the dashboard package, found $($packages.Count)."
           }
           foreach ($package in $packages) {
             Copy-Item $package.FullName $packageRoot -Force
@@ -135,9 +121,13 @@ jobs:
               --repo $env:GITHUB_REPOSITORY `
               --target $env:GITHUB_SHA `
               --title "LLM Meter $tag" `
-              --notes "Windows 11 preview build. This bundle contains the WinUI dashboard, Windows Widgets provider, install script, and test certificate." `
+              --notes "Windows 11 preview build. This bundle contains the WinUI dashboard tray app, install script, and test certificate." `
               --prerelease
           }
+          gh release edit $tag `
+            --repo $env:GITHUB_REPOSITORY `
+            --title "LLM Meter $tag" `
+            --notes "Windows 11 preview build. This bundle contains the WinUI dashboard tray app, install script, and test certificate. It does not register Windows Widgets."
           $assets = Get-ChildItem $env:ARTIFACT_ROOT -File |
             Where-Object { $_.Extension -in ".zip", ".sha256" }
           foreach ($asset in $assets) {

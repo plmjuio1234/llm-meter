@@ -1,22 +1,53 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using LLMMeter.Core;
 using Microsoft.UI;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using WinRT.Interop;
 
 namespace LLMMeter.App;
 
 public sealed partial class MainWindow : Window
 {
     public DashboardViewModel ViewModel { get; } = new();
+    public DispatcherQueue DispatcherQueue => ContentRoot.DispatcherQueue;
+
+    private readonly IntPtr windowHandle;
 
     public MainWindow()
     {
         InitializeComponent();
+        windowHandle = WindowNative.GetWindowHandle(this);
         ContentRoot.DataContext = ViewModel;
-        ContentRoot.Loaded += async (_, _) => await ViewModel.LoadAsync();
+        _ = ViewModel.LoadAsync();
+    }
+
+    public void ToggleFromTray()
+    {
+        if (NativeMethods.IsWindowVisible(windowHandle))
+        {
+            HideToTray();
+        }
+        else
+        {
+            ShowFromTray();
+        }
+    }
+
+    public void ShowFromTray()
+    {
+        NativeMethods.ShowWindow(windowHandle, NativeMethods.SW_RESTORE);
+        Activate();
+        NativeMethods.SetForegroundWindow(windowHandle);
+    }
+
+    public void HideToTray()
+    {
+        NativeMethods.ShowWindow(windowHandle, NativeMethods.SW_HIDE);
     }
 
     private async void Refresh_Click(object sender, RoutedEventArgs e)
@@ -31,6 +62,24 @@ public sealed partial class MainWindow : Window
             new DetailWindow(account).Activate();
         }
     }
+}
+
+internal static class NativeMethods
+{
+    internal const int SW_HIDE = 0;
+    internal const int SW_RESTORE = 9;
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool IsWindowVisible(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool SetForegroundWindow(IntPtr hWnd);
 }
 
 public sealed class DashboardViewModel : INotifyPropertyChanged

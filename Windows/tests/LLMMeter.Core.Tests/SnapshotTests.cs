@@ -46,7 +46,7 @@ public sealed class SnapshotTests
     }
 
     [Fact]
-    public void WidgetCardContainsSafeAdaptiveCardPayload()
+    public void SnapshotSerializationContainsSafePayload()
     {
         var snapshot = new SharedSnapshot(
             SharedSnapshot.CurrentSchemaVersion,
@@ -63,10 +63,12 @@ public sealed class SnapshotTests
                     [new MetricSnapshot("monthly", "Monthly", "68%", "100%", 0.68)])
             ]);
 
-        var json = WidgetCardBuilder.Build(snapshot, WidgetSize.Medium);
+        var json = JsonSerializer.Serialize(snapshot, SnapshotJson.Options);
         using var document = JsonDocument.Parse(json);
 
-        Assert.Equal("AdaptiveCard", document.RootElement.GetProperty("type").GetString());
+        Assert.Equal(
+            "anthropic-main",
+            document.RootElement.GetProperty("accounts")[0].GetProperty("accountId").GetString());
         Assert.DoesNotContain("token", json, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Claude", json, StringComparison.Ordinal);
     }

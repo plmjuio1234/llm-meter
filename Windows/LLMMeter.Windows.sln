@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLMMeter.Core.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLMMeter.App", "src\LLMMeter.App\LLMMeter.App.csproj", "{D81D0B07-98E3-4C5E-8CE3-3CEFB4BEA0F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLMMeter.WidgetProvider", "src\LLMMeter.WidgetProvider\LLMMeter.WidgetProvider.csproj", "{E5A3C7B0-B6B8-43E9-BE3F-40EEB89DBA1C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +26,6 @@ Global
 		{D81D0B07-98E3-4C5E-8CE3-3CEFB4BEA0F5}.Debug|Any CPU.Build.0 = Debug|x64
 		{D81D0B07-98E3-4C5E-8CE3-3CEFB4BEA0F5}.Release|Any CPU.ActiveCfg = Release|x64
 		{D81D0B07-98E3-4C5E-8CE3-3CEFB4BEA0F5}.Release|Any CPU.Build.0 = Release|x64
-		{E5A3C7B0-B6B8-43E9-BE3F-40EEB89DBA1C}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{E5A3C7B0-B6B8-43E9-BE3F-40EEB89DBA1C}.Debug|Any CPU.Build.0 = Debug|x64
-		{E5A3C7B0-B6B8-43E9-BE3F-40EEB89DBA1C}.Release|Any CPU.ActiveCfg = Release|x64
-		{E5A3C7B0-B6B8-43E9-BE3F-40EEB89DBA1C}.Release|Any CPU.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
