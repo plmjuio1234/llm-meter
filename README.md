@@ -1,5 +1,9 @@
 # LLM Meter
 
+<p align="center">
+  <img src="LLMUsageApp/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png" width="160" alt="LLM Meter logo">
+</p>
+
 Privacy-first macOS menu-bar app for monitoring LLM quotas, balances, and
 account freshness across multiple accounts.
 

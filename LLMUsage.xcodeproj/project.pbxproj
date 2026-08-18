@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		400000000000000000000035 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000035 /* Assets.xcassets */; };
 		400000000000000000000002 /* LLMUsageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000003 /* LLMUsageApp.swift */; };
 		400000000000000000000003 /* LLMUsageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000006 /* LLMUsageWidget.swift */; };
 		400000000000000000000004 /* LLMUsageAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000009 /* LLMUsageAppTests.swift */; };
@@ -42,6 +43,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		200000000000000000000035 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		200000000000000000000001 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		200000000000000000000003 /* LLMUsageApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMUsageApp.swift; sourceTree = "<group>"; };
 		200000000000000000000004 /* LLMUsageApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				100000000000000000000008 /* App */,
+				200000000000000000000035 /* Assets.xcassets */,
 				100000000000000000000020 /* Accounts */,
 				100000000000000000000021 /* Auth */,
 				100000000000000000000022 /* Storage */,
@@ -302,6 +305,7 @@
 			buildConfigurationList = 800000000000000000000002 /* Build configuration list for LLMUsageApp */;
 			buildPhases = (
 				700000000000000000000002 /* Sources */,
+				700000000000000000000010 /* Resources */,
 				700000000000000000000005 /* Frameworks */,
 				700000000000000000000009 /* Embed Widget */,
 			);
@@ -385,6 +389,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		700000000000000000000010 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				400000000000000000000035 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		700000000000000000000009 /* Embed Widget */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -458,6 +470,7 @@
 		810000000000000000000003 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = LLMUsageApp/LLMUsageApp.entitlements;
@@ -479,6 +492,7 @@
 		810000000000000000000004 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = LLMUsageApp/LLMUsageApp.entitlements;
