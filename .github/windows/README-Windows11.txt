@@ -1,5 +1,7 @@
 LLM Meter Windows 11 preview
 
+Release: https://github.com/plmjuio1234/llm-meter/releases/tag/v1.1.0-windows11-tray-preview
+
 1. Extract this archive.
 2. Open PowerShell in the extracted folder.
 3. Run:

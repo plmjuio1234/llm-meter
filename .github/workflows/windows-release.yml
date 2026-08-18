@@ -6,7 +6,7 @@ on:
       tag:
         description: "GitHub release tag"
         required: true
-        default: "v1.1.0-windows11-preview"
+        default: "v1.1.0-windows11-tray-preview"
   push:
     tags:
       - "windows-v*"
