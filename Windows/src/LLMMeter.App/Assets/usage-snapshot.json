@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-18T12:00:00Z",
+  "accounts": [
+    {
+      "accountId": "openai-main",
+      "provider": "OpenAI",
+      "surface": "OAuth",
+      "label": "OpenAI / Personal",
+      "isEnabled": true,
+      "identity": "personal@example.com",
+      "state": "fresh",
+      "metrics": [
+        {
+          "key": "weekly",
+          "label": "Weekly quota",
+          "value": "42%",
+          "limit": "100%",
+          "ratio": 0.42,
+          "resetText": "Resets in 2d 4h"
+        },
+        {
+          "key": "messages",
+          "label": "Messages",
+          "value": "1,284",
+          "unit": "requests"
+        }
+      ]
+    },
+    {
+      "accountId": "anthropic-main",
+      "provider": "Anthropic",
+      "surface": "OAuth",
+      "label": "Claude / Work",
+      "isEnabled": true,
+      "identity": "work@example.com",
+      "state": "stale",
+      "metrics": [
+        {
+          "key": "monthly",
+          "label": "Monthly quota",
+          "value": "68%",
+          "limit": "100%",
+          "ratio": 0.68,
+          "resetText": "Last checked 3h ago"
+        }
+      ]
+    },
+    {
+      "accountId": "kimi-main",
+      "provider": "Kimi",
+      "surface": "API key",
+      "label": "Moonshot / API",
+      "isEnabled": true,
+      "identity": null,
+      "state": "fresh",
+      "metrics": [
+        {
+          "key": "balance",
+          "label": "Balance",
+          "value": "$18.40",
+          "unit": "USD"
+        }
+      ]
+    },
+    {
+      "accountId": "glm-main",
+      "provider": "GLM",
+      "surface": "API key",
+      "label": "GLM / API",
+      "isEnabled": true,
+      "identity": null,
+      "state": "unsupported",
+      "metrics": []
+    }
+  ]
+}

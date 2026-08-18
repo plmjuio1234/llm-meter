@@ -1,0 +1,62 @@
+<Window
+    x:Class="LLMMeter.App.DetailWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Account details">
+    <Grid x:Name="ContentRoot" Background="{StaticResource WindowBackgroundBrush}">
+        <ScrollViewer>
+            <StackPanel Width="520"
+                        Margin="32"
+                        Spacing="22">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{Binding Label}"
+                               Foreground="{StaticResource PrimaryTextBrush}"
+                               FontSize="30"
+                               FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding ProviderLine}"
+                               Foreground="{StaticResource SecondaryTextBrush}"
+                               FontSize="14" />
+                </StackPanel>
+                <Border Padding="20"
+                        Background="{StaticResource CardBackgroundBrush}"
+                        BorderBrush="{StaticResource CardBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="16">
+                    <StackPanel Spacing="18">
+                        <TextBlock Text="Usage details"
+                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold" />
+                        <ItemsControl ItemsSource="{Binding Metrics}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Spacing="5" Margin="0,0,0,12">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <TextBlock Text="{Binding Label}"
+                                                       Foreground="{StaticResource SecondaryTextBrush}" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding ValueLine}"
+                                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                                       FontWeight="SemiBold" />
+                                        </Grid>
+                                        <ProgressBar Height="7"
+                                                     Maximum="1"
+                                                     Value="{Binding Ratio}"
+                                                     Foreground="{StaticResource PrimaryAccentBrush}" />
+                                        <TextBlock Text="{Binding ResetText}"
+                                                   Foreground="{StaticResource MutedTextBrush}"
+                                                   FontSize="12" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="{Binding EmptyMetricsText}"
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding EmptyMetricsVisibility}" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

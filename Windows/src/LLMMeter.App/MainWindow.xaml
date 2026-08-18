@@ -1,0 +1,160 @@
+<Window
+    x:Class="LLMMeter.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="LLM Meter">
+    <Grid x:Name="ContentRoot" Background="{StaticResource WindowBackgroundBrush}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <Grid MaxWidth="1120"
+                  Margin="32,28,32,40"
+                  HorizontalAlignment="Center"
+                  RowSpacing="24"
+                  RowDefinitions="Auto,Auto,Auto">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="LLM Meter"
+                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                   FontSize="32"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Text="Your AI usage at a glance"
+                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                   FontSize="15" />
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Click="Refresh_Click"
+                            Padding="18,10"
+                            HorizontalAlignment="Right"
+                            AutomationProperties.Name="Refresh account usage">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE72C;" />
+                            <TextBlock Text="Refresh" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <Border Grid.Row="1"
+                        Padding="18,14"
+                        Background="{StaticResource PanelBackgroundBrush}"
+                        BorderBrush="{StaticResource CardBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="12">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Ellipse Width="9"
+                                 Height="9"
+                                 Fill="{StaticResource FreshBrush}"
+                                 VerticalAlignment="Center" />
+                        <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="2">
+                            <TextBlock Text="Account overview"
+                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                       FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding StatusText}"
+                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                       FontSize="12" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding LastUpdatedText}"
+                                   Foreground="{StaticResource MutedTextBrush}"
+                                   FontSize="12"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding Accounts}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid MaximumRowsOrColumns="2"
+                                           Orientation="Horizontal"
+                                           HorizontalAlignment="Stretch"
+                                           MaximumWidth="1120" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="520"
+                                    Margin="0,0,20,20"
+                                    Padding="22"
+                                    Background="{StaticResource CardBackgroundBrush}"
+                                    BorderBrush="{StaticResource CardBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16">
+                                <Grid RowSpacing="16"
+                                      RowDefinitions="Auto,Auto,Auto,Auto">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Spacing="3">
+                                            <TextBlock Text="{Binding Label}"
+                                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                                       FontSize="19"
+                                                       FontWeight="SemiBold"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding ProviderLine}"
+                                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                                       FontSize="12" />
+                                        </StackPanel>
+                                        <Border Grid.Column="1"
+                                                Padding="9,4"
+                                                Background="{Binding StateBackground}"
+                                                CornerRadius="10">
+                                            <TextBlock Text="{Binding StateLabel}"
+                                                       Foreground="{StaticResource PrimaryTextBrush}"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold" />
+                                        </Border>
+                                    </Grid>
+
+                                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Metrics}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,12"
+                                                      RowDefinitions="Auto,Auto,Auto">
+                                                    <Grid ColumnDefinitions="*,Auto">
+                                                        <TextBlock Text="{Binding Label}"
+                                                                   Foreground="{StaticResource SecondaryTextBrush}"
+                                                                   FontSize="12" />
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="{Binding ValueLine}"
+                                                                   Foreground="{StaticResource PrimaryTextBrush}"
+                                                                   FontSize="13"
+                                                                   FontWeight="SemiBold" />
+                                                    </Grid>
+                                                    <ProgressBar Grid.Row="1"
+                                                                 Margin="0,7,0,0"
+                                                                 Height="6"
+                                                                 Maximum="1"
+                                                                 Value="{Binding Ratio}"
+                                                                 Foreground="{StaticResource PrimaryAccentBrush}" />
+                                                    <TextBlock Grid.Row="2"
+                                                               Text="{Binding ResetText}"
+                                                               Foreground="{StaticResource MutedTextBrush}"
+                                                               FontSize="11"
+                                                               Margin="0,4,0,0" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <TextBlock Grid.Row="2"
+                                               Text="{Binding EmptyMetricsText}"
+                                               Foreground="{StaticResource SecondaryTextBrush}"
+                                               Visibility="{Binding EmptyMetricsVisibility}"
+                                               TextWrapping="Wrap" />
+
+                                    <Button Grid.Row="3"
+                                            Tag="{Binding}"
+                                            Click="OpenDetails_Click"
+                                            HorizontalAlignment="Left"
+                                            Padding="14,8">
+                                        <StackPanel Orientation="Horizontal" Spacing="7">
+                                            <TextBlock Text="Details" />
+                                            <FontIcon Glyph="&#xE72A;" FontSize="12" />
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

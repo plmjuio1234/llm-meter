@@ -1,0 +1,150 @@
+name: Windows 11 Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "GitHub release tag"
+        required: true
+        default: "v1.1.0-windows11-preview"
+  push:
+    tags:
+      - "windows-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-2022
+    env:
+      CONFIGURATION: Release
+      PLATFORM: x64
+      ARTIFACT_ROOT: ${{ github.workspace }}\Windows\Artifacts
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.x"
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Test portable Windows core
+        run: dotnet test Windows/tests/LLMMeter.Core.Tests/LLMMeter.Core.Tests.csproj --configuration $env:CONFIGURATION
+
+      - name: Create test signing certificate
+        shell: pwsh
+        run: |
+          $artifactRoot = $env:ARTIFACT_ROOT
+          New-Item -ItemType Directory -Force -Path $artifactRoot | Out-Null
+          $certificate = New-SelfSignedCertificate `
+            -Type Custom `
+            -Subject "CN=LLM Meter" `
+            -FriendlyName "LLM Meter Windows 11 test signing" `
+            -KeyUsage DigitalSignature `
+            -CertStoreLocation Cert:\CurrentUser\My
+          $password = ConvertTo-SecureString `
+            -String "LLMMeterWindows11TestOnly" `
+            -Force `
+            -AsPlainText
+          $pfxPath = Join-Path $env:RUNNER_TEMP "LLMMeter.cer.pfx"
+          Export-PfxCertificate -Cert $certificate -FilePath $pfxPath -Password $password | Out-Null
+          Export-Certificate `
+            -Cert $certificate `
+            -FilePath (Join-Path $artifactRoot "LLMMeter-TestCertificate.cer") | Out-Null
+          "PACKAGE_CERT_PATH=$pfxPath" >> $env:GITHUB_ENV
+          "PACKAGE_CERT_PASSWORD=LLMMeterWindows11TestOnly" >> $env:GITHUB_ENV
+
+      - name: Build packaged dashboard
+        shell: pwsh
+        run: |
+          msbuild Windows/src/LLMMeter.App/LLMMeter.App.csproj `
+            /restore `
+            /t:Build `
+            /p:Configuration=$env:CONFIGURATION `
+            /p:Platform=$env:PLATFORM `
+            /p:GenerateAppxPackageOnBuild=true `
+            /p:WindowsAppSDKSelfContained=true `
+            /p:AppxPackageSigningEnabled=true `
+            /p:PackageCertificateKeyFile="$env:PACKAGE_CERT_PATH" `
+            /p:PackageCertificatePassword="$env:PACKAGE_CERT_PASSWORD" `
+            /p:AppxPackageDir="$env:ARTIFACT_ROOT\App\"
+
+      - name: Build packaged widget provider
+        shell: pwsh
+        run: |
+          msbuild Windows/src/LLMMeter.WidgetProvider/LLMMeter.WidgetProvider.csproj `
+            /restore `
+            /t:Build `
+            /p:Configuration=$env:CONFIGURATION `
+            /p:Platform=$env:PLATFORM `
+            /p:GenerateAppxPackageOnBuild=true `
+            /p:WindowsAppSDKSelfContained=true `
+            /p:AppxPackageSigningEnabled=true `
+            /p:PackageCertificateKeyFile="$env:PACKAGE_CERT_PATH" `
+            /p:PackageCertificatePassword="$env:PACKAGE_CERT_PASSWORD" `
+            /p:AppxPackageDir="$env:ARTIFACT_ROOT\WidgetProvider\"
+
+      - name: Assemble installable Windows bundle
+        shell: pwsh
+        run: |
+          $artifactRoot = $env:ARTIFACT_ROOT
+          $packageRoot = Join-Path $artifactRoot "Packages"
+          New-Item -ItemType Directory -Force -Path $packageRoot | Out-Null
+
+          $packages = Get-ChildItem -Path $artifactRoot -Recurse -File |
+            Where-Object { $_.Extension -in ".msix", ".msixbundle", ".appx", ".appxbundle" }
+          if ($packages.Count -lt 2) {
+            throw "Expected dashboard and widget provider packages, found $($packages.Count)."
+          }
+          foreach ($package in $packages) {
+            Copy-Item $package.FullName $packageRoot -Force
+          }
+
+          Copy-Item ".github/windows/Install-LLMMeter.ps1" $artifactRoot -Force
+          Copy-Item ".github/windows/README-Windows11.txt" $artifactRoot -Force
+          Copy-Item (Join-Path $artifactRoot "LLMMeter-TestCertificate.cer") $packageRoot -Force
+
+          $tag = "${{ inputs.tag }}"
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+            $tag = $env:GITHUB_REF_NAME
+          }
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+            $tag = "windows-build-$env:GITHUB_RUN_NUMBER"
+          }
+          $zipPath = Join-Path $artifactRoot "LLMMeter-Windows11-$tag.zip"
+          Compress-Archive -Path (Join-Path $artifactRoot "Packages"), `
+            (Join-Path $artifactRoot "Install-LLMMeter.ps1"), `
+            (Join-Path $artifactRoot "README-Windows11.txt") `
+            -DestinationPath $zipPath `
+            -Force
+          $hash = Get-FileHash $zipPath -Algorithm SHA256
+          "$($hash.Hash)  $([IO.Path]::GetFileName($zipPath))" |
+            Set-Content (Join-Path $artifactRoot "$([IO.Path]::GetFileName($zipPath)).sha256")
+          "RELEASE_TAG=$tag" >> $env:GITHUB_ENV
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = $env:RELEASE_TAG
+          gh release view $tag --repo $env:GITHUB_REPOSITORY 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag `
+              --repo $env:GITHUB_REPOSITORY `
+              --target $env:GITHUB_SHA `
+              --title "LLM Meter $tag" `
+              --notes "Windows 11 preview build. This bundle contains the WinUI dashboard, Windows Widgets provider, install script, and test certificate." `
+              --prerelease
+          }
+          $assets = Get-ChildItem $env:ARTIFACT_ROOT -File |
+            Where-Object { $_.Extension -in ".zip", ".sha256" }
+          foreach ($asset in $assets) {
+            gh release upload $tag $asset.FullName --repo $env:GITHUB_REPOSITORY --clobber
+          }

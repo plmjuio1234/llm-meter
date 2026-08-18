@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  IgnorableNamespaces="uap uap3 rescap com">
+  <Identity Name="LLMMeter.WidgetProvider"
+            Publisher="CN=LLM Meter"
+            Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>LLM Meter Widgets</DisplayName>
+    <PublisherDisplayName>LLM Meter</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application
+      Id="WidgetProvider"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        AppListEntry="none"
+        DisplayName="LLM Meter Widgets"
+        Square150x150Logo="Assets\StoreLogo.png"
+        Square44x44Logo="Assets\StoreLogo.png"
+        Description="LLM Meter Windows 11 widget provider" />
+      <Extensions>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer
+              Executable="LLMMeter.WidgetProvider.exe"
+              Arguments="-RegisterProcessAsComServer"
+              DisplayName="LLM Meter Widget Provider">
+              <com:Class
+                Id="A4A4E5EE-6DB8-4A4A-93D7-2B0AFA1E6B5B"
+                DisplayName="LLM Meter Widget Provider" />
+            </com:ExeServer>
+          </com:ComServer>
+        </com:Extension>
+        <uap3:Extension Category="windows.appExtension">
+          <uap3:AppExtension
+            Name="com.microsoft.windows.widgets"
+            DisplayName="LLM Meter"
+            Id="llmmeter.windows11"
+            PublicFolder="Public">
+            <uap3:Properties>
+              <WidgetProvider>
+                <ProviderIcons>
+                  <Icon Path="Assets\StoreLogo.png" />
+                </ProviderIcons>
+                <Activation>
+                  <CreateInstance ClassId="A4A4E5EE-6DB8-4A4A-93D7-2B0AFA1E6B5B" />
+                </Activation>
+                <Definitions>
+                  <Definition
+                    Id="LLMMeter_Widget"
+                    DisplayName="LLM Meter"
+                    Description="Your AI usage at a glance">
+                    <Capabilities>
+                      <Capability><Size Name="small" /></Capability>
+                      <Capability><Size Name="medium" /></Capability>
+                      <Capability><Size Name="large" /></Capability>
+                    </Capabilities>
+                    <ThemeResources>
+                      <Icons>
+                        <Icon Path="Assets\StoreLogo.png" />
+                      </Icons>
+                      <DarkMode />
+                      <LightMode />
+                    </ThemeResources>
+                  </Definition>
+                </Definitions>
+              </WidgetProvider>
+            </uap3:Properties>
+          </uap3:AppExtension>
+        </uap3:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

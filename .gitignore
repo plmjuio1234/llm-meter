@@ -8,6 +8,10 @@ DerivedData/
 build/
 **/.build/
 .swiftpm/
+**/bin/
+**/obj/
+.vs/
+TestResults/
 xcuserdata/
 *.xcuserstate
 *.xcuserdatad/

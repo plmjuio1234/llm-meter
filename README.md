@@ -10,8 +10,8 @@ account freshness across multiple accounts.
 ## Current status
 
 - Release: `v1.0.0`
-- Platform: macOS 14+
-- Windows support: planned
+- Platform: macOS 14+ and Windows 11
+- Windows support: WinUI 3 dashboard and Windows Widgets provider
 - Provider access: official APIs only
 
 ## Features
@@ -63,6 +63,15 @@ The app is generated under
 `build/Build/Products/Release/LLMUsageApp.app` when using the default derived
 data path. Unsigned local builds may require Finder's **Open** action on first
 launch.
+
+## Windows 11
+
+The Windows port lives under [`Windows/`](Windows/). It uses WinUI 3 for the
+dashboard and a packaged Win32 Windows Widgets provider for the compact
+surface. Both consume a credential-free normalized snapshot projection.
+
+See [`Windows/README.md`](Windows/README.md) for Windows 11 prerequisites and
+build commands.
 
 ## Security boundary
 
