@@ -8,6 +8,7 @@ public enum AccountState
     Fresh,
     Stale,
     AuthRequired,
+    PermissionDenied,
     RateLimited,
     Unsupported,
     NoData

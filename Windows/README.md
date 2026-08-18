@@ -7,16 +7,19 @@ or hide the dashboard.
 ## Current implementation
 
 - `LLMMeter.Core` validates the normalized account snapshot and produces
-  the credential-free local snapshot projection.
+  the credential-free local snapshot projection, PKCE values, and OpenAI/
+  Anthropic usage response parsing.
 - `LLMMeter.App` renders the account cards, freshness states, progress bars,
-  account details, and the LLM Meter visual tokens in WinUI 3. It owns the
-  notification-area tray icon, dashboard toggle, and Exit menu.
-- The app currently reads the checked-in fixture at
-  `src/LLMMeter.App/Assets/usage-snapshot.json` and mirrors the sanitized
-  projection to `%LocalAppData%\\LLMMeter\\usage-snapshot.json`.
-- Provider OAuth/API-key adapters and Windows Credential Manager integration
-  are intentionally behind this snapshot boundary; no credential material is
-  included in the fixture or shared snapshot.
+  account details, connect actions, and the LLM Meter visual tokens in WinUI
+  3. It owns the notification-area tray icon, dashboard toggle, OAuth
+  loopback listener, provider refresh, DPAPI credential store, and Exit menu.
+- OpenAI ChatGPT/Codex and Anthropic Claude use browser PKCE OAuth and their
+  official usage endpoints. Credentials are encrypted for the current Windows
+  user and sanitized usage is written to
+  `%LocalAppData%\\LLMMeter\\usage-snapshot.json`.
+- The Windows package no longer ships a checked-in fixture as runtime data.
+  Live provider endpoint/schema behavior is not validated by CI and must be
+  tested with the user's account on Windows.
 
 ## Build on Windows 11
 
@@ -35,10 +38,12 @@ dotnet test .\Windows\tests\LLMMeter.Core.Tests\LLMMeter.Core.Tests.csproj
 dotnet build .\Windows\src\LLMMeter.App\LLMMeter.App.csproj -c Release -p:Platform=x64
 ```
 
-Install the packaged app from Visual Studio or use the release archive's
-`Install-LLMMeter.ps1` script. The app starts resident in the notification
+The release archive is a self-contained unpackaged x64 EXE bundle. Extract
+the complete archive and run `LLMMeter.App.exe`; no MSIX certificate import or
+PowerShell installer is required. The app starts resident in the notification
 area; Windows may place it behind the taskbar hidden-icons arrow according to
 the user's notification-area settings.
 
-This preview reads fixture data only. OpenAI/Anthropic OAuth and API-key
-adapters are not included in the Windows package yet.
+Use **Connect OpenAI** or **Connect Claude** to start browser OAuth, then
+**Refresh** to request current usage. The release is unsigned, so SmartScreen
+may show an unknown-publisher warning.

@@ -29,12 +29,26 @@ public static class SnapshotStore
         CancellationToken cancellationToken = default)
     {
         snapshot.Validate();
-        Directory.CreateDirectory(Path.GetDirectoryName(path) ?? ".");
-        await using var stream = File.Create(path);
-        await JsonSerializer.SerializeAsync(
-            stream,
-            snapshot,
-            SnapshotJson.Options,
-            cancellationToken);
+        var directory = Path.GetDirectoryName(path) ?? ".";
+        Directory.CreateDirectory(directory);
+        var temporaryPath = $"{path}.{Guid.NewGuid():N}.tmp";
+        try
+        {
+            await using var stream = File.Create(temporaryPath);
+            await JsonSerializer.SerializeAsync(
+                stream,
+                snapshot,
+                SnapshotJson.Options,
+                cancellationToken);
+            await stream.FlushAsync(cancellationToken);
+            File.Move(temporaryPath, path, overwrite: true);
+        }
+        finally
+        {
+            if (File.Exists(temporaryPath))
+            {
+                File.Delete(temporaryPath);
+            }
+        }
     }
 }

@@ -53,7 +53,17 @@ public sealed partial class MainWindow : Window
 
     private async void Refresh_Click(object sender, RoutedEventArgs e)
     {
-        await ViewModel.LoadAsync();
+        await ViewModel.RefreshAsync();
+    }
+
+    private async void ConnectOpenAI_Click(object sender, RoutedEventArgs e)
+    {
+        await ViewModel.ConnectAsync(ConnectedProvider.OpenAI);
+    }
+
+    private async void ConnectAnthropic_Click(object sender, RoutedEventArgs e)
+    {
+        await ViewModel.ConnectAsync(ConnectedProvider.Anthropic);
     }
 
     private void OpenDetails_Click(object sender, RoutedEventArgs e)
@@ -86,7 +96,8 @@ internal static class NativeMethods
 public sealed class DashboardViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<AccountCardViewModel> Accounts { get; } = [];
-    private string statusText = "Loading account snapshot...";
+    private readonly ProviderConnectionService connectionService = new();
+    private string statusText = "No accounts connected";
     private string lastUpdatedText = "Not loaded";
 
     public string StatusText
@@ -125,25 +136,12 @@ public sealed class DashboardViewModel : INotifyPropertyChanged
     {
         try
         {
-            var path = Path.Combine(
-                AppContext.BaseDirectory,
-                "Assets",
-                "usage-snapshot.json");
-            var snapshot = await SnapshotStore.LoadAsync(path);
-            var sharedPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "LLMMeter",
-                "usage-snapshot.json");
-            await SnapshotStore.SaveAsync(sharedPath, snapshot);
-
-            Accounts.Clear();
-            foreach (var account in snapshot.Accounts.Where(account => account.IsEnabled))
+            var snapshot = await connectionService.LoadSnapshotAsync();
+            ApplySnapshot(snapshot);
+            if (snapshot.Accounts.Count > 0)
             {
-                Accounts.Add(new AccountCardViewModel(account));
+                ApplySnapshot(await connectionService.RefreshAsync());
             }
-
-            StatusText = $"{Accounts.Count} accounts connected";
-            LastUpdatedText = $"Updated {snapshot.GeneratedAt.LocalDateTime:g}";
         }
         catch (Exception error)
         {
@@ -151,6 +149,51 @@ public sealed class DashboardViewModel : INotifyPropertyChanged
             StatusText = $"Snapshot unavailable: {error.Message}";
             LastUpdatedText = "No data";
         }
+    }
+
+    public async Task RefreshAsync()
+    {
+        try
+        {
+            ApplySnapshot(await connectionService.RefreshAsync());
+        }
+        catch
+        {
+            StatusText = "Refresh could not be completed.";
+        }
+    }
+
+    public async Task ConnectAsync(ConnectedProvider provider)
+    {
+        StatusText = $"Connect {provider} in your browser...";
+        try
+        {
+            ApplySnapshot(await connectionService.ConnectAsync(provider));
+        }
+        catch (OperationCanceledException)
+        {
+            StatusText = "Account connection timed out or was cancelled.";
+        }
+        catch
+        {
+            StatusText = "Account connection could not be completed.";
+        }
+    }
+
+    private void ApplySnapshot(SharedSnapshot snapshot)
+    {
+        Accounts.Clear();
+        foreach (var account in snapshot.Accounts.Where(account => account.IsEnabled))
+        {
+            Accounts.Add(new AccountCardViewModel(account));
+        }
+
+        StatusText = Accounts.Count == 0
+            ? "No accounts connected"
+            : $"{Accounts.Count} accounts connected";
+        LastUpdatedText = snapshot.Accounts.Count == 0
+            ? "Not loaded"
+            : $"Updated {snapshot.GeneratedAt.LocalDateTime:g}";
     }
 }
 
@@ -176,6 +219,7 @@ public sealed class AccountCardViewModel
             AccountState.Fresh => "Fresh",
             AccountState.Stale => "Stale",
             AccountState.AuthRequired => "Sign in required",
+            AccountState.PermissionDenied => "Permission denied",
             AccountState.RateLimited => "Rate limited",
             AccountState.Unsupported => "Unsupported",
             _ => "No data"
@@ -184,7 +228,9 @@ public sealed class AccountCardViewModel
         {
             AccountState.Fresh => ColorHelper.FromArgb(0xFF, 0x1D, 0x6B, 0x5B),
             AccountState.Stale => ColorHelper.FromArgb(0xFF, 0x7A, 0x56, 0x1A),
-            AccountState.Unsupported or AccountState.AuthRequired =>
+            AccountState.Unsupported or
+            AccountState.AuthRequired or
+            AccountState.PermissionDenied =>
                 ColorHelper.FromArgb(0xFF, 0x6F, 0x32, 0x58),
             _ => ColorHelper.FromArgb(0xFF, 0x55, 0x36, 0x36)
         });

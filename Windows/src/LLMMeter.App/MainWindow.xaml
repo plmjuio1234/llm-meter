@@ -21,16 +21,27 @@
                                    Foreground="{StaticResource SecondaryTextBrush}"
                                    FontSize="15" />
                     </StackPanel>
-                    <Button Grid.Column="1"
-                            Click="Refresh_Click"
-                            Padding="18,10"
-                            HorizontalAlignment="Right"
-                            AutomationProperties.Name="Refresh account usage">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <FontIcon Glyph="&#xE72C;" />
-                            <TextBlock Text="Refresh" />
-                        </StackPanel>
-                    </Button>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="8"
+                                HorizontalAlignment="Right">
+                        <Button Content="Connect OpenAI"
+                                Click="ConnectOpenAI_Click"
+                                Padding="14,10"
+                                AutomationProperties.Name="Connect OpenAI account" />
+                        <Button Content="Connect Claude"
+                                Click="ConnectAnthropic_Click"
+                                Padding="14,10"
+                                AutomationProperties.Name="Connect Anthropic account" />
+                        <Button Click="Refresh_Click"
+                                Padding="18,10"
+                                AutomationProperties.Name="Refresh account usage">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE72C;" />
+                                <TextBlock Text="Refresh" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
 
                 <Border Grid.Row="1"

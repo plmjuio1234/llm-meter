@@ -6,7 +6,7 @@ on:
       tag:
         description: "GitHub release tag"
         required: true
-        default: "v1.1.0-windows11-tray-preview"
+        default: "v1.2.0-windows11-exe-preview"
   push:
     tags:
       - "windows-v*"
@@ -37,59 +37,39 @@ jobs:
       - name: Test portable Windows core
         run: dotnet test Windows/tests/LLMMeter.Core.Tests/LLMMeter.Core.Tests.csproj --configuration $env:CONFIGURATION
 
-      - name: Create test signing certificate
+      - name: Publish standalone dashboard
         shell: pwsh
         run: |
           $artifactRoot = $env:ARTIFACT_ROOT
-          New-Item -ItemType Directory -Force -Path $artifactRoot | Out-Null
-          $certificate = New-SelfSignedCertificate `
-            -Type Custom `
-            -Subject "CN=LLM Meter" `
-            -FriendlyName "LLM Meter Windows 11 test signing" `
-            -KeyAlgorithm RSA `
-            -KeyLength 2048 `
-            -KeySpec Signature `
-            -KeyUsage DigitalSignature `
-            -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3") `
-            -CertStoreLocation Cert:\CurrentUser\My
-          Export-Certificate `
-            -Cert $certificate `
-            -FilePath (Join-Path $artifactRoot "LLMMeter-TestCertificate.cer") | Out-Null
-          "PACKAGE_CERT_THUMBPRINT=$($certificate.Thumbprint)" >> $env:GITHUB_ENV
+          $publishRoot = Join-Path $artifactRoot "App"
+          New-Item -ItemType Directory -Force -Path $publishRoot | Out-Null
+          dotnet publish Windows/src/LLMMeter.App/LLMMeter.App.csproj `
+            --configuration $env:CONFIGURATION `
+            --runtime win-x64 `
+            --self-contained true `
+            --output $publishRoot `
+            -p:Platform=$env:PLATFORM `
+            -p:PlatformTarget=x64 `
+            -p:WindowsPackageType=None `
+            -p:EnableMsixTooling=false `
+            -p:WindowsAppSDKSelfContained=true `
+            -p:PublishSingleFile=false
 
-      - name: Build packaged dashboard
-        shell: pwsh
-        run: |
-          msbuild Windows/src/LLMMeter.App/LLMMeter.App.csproj `
-            /restore `
-            /t:Build `
-            /p:Configuration=$env:CONFIGURATION `
-            /p:Platform=$env:PLATFORM `
-            /p:GenerateAppxPackageOnBuild=true `
-            /p:WindowsAppSDKSelfContained=true `
-            /p:AppxPackageSigningEnabled=true `
-            /p:PackageCertificateThumbprint="$env:PACKAGE_CERT_THUMBPRINT" `
-            /p:AppxPackageDir="$env:ARTIFACT_ROOT\App\"
+          $application = Get-ChildItem $publishRoot -Filter "LLMMeter.App.exe" -File
+          if ($null -eq $application) {
+            throw "The standalone dashboard executable was not published."
+          }
+          $packagedFiles = Get-ChildItem $publishRoot -Recurse -File |
+            Where-Object { $_.Extension -in ".msix", ".msixbundle", ".appx", ".appxbundle", ".cer" }
+          if ($packagedFiles.Count -gt 0) {
+            throw "The standalone payload contains package or certificate files."
+          }
 
       - name: Assemble installable Windows bundle
         shell: pwsh
         run: |
           $artifactRoot = $env:ARTIFACT_ROOT
-          $packageRoot = Join-Path $artifactRoot "Packages"
-          New-Item -ItemType Directory -Force -Path $packageRoot | Out-Null
-
-          $packages = Get-ChildItem -Path $artifactRoot -Recurse -File |
-            Where-Object { $_.Extension -in ".msix", ".msixbundle", ".appx", ".appxbundle" }
-          if ($packages.Count -lt 1) {
-            throw "Expected the dashboard package, found $($packages.Count)."
-          }
-          foreach ($package in $packages) {
-            Copy-Item $package.FullName $packageRoot -Force
-          }
-
-          Copy-Item ".github/windows/Install-LLMMeter.ps1" $artifactRoot -Force
           Copy-Item ".github/windows/README-Windows11.txt" $artifactRoot -Force
-          Copy-Item (Join-Path $artifactRoot "LLMMeter-TestCertificate.cer") $packageRoot -Force
 
           $tag = "${{ inputs.tag }}"
           if ([string]::IsNullOrWhiteSpace($tag)) {
@@ -99,8 +79,7 @@ jobs:
             $tag = "windows-build-$env:GITHUB_RUN_NUMBER"
           }
           $zipPath = Join-Path $artifactRoot "LLMMeter-Windows11-$tag.zip"
-          Compress-Archive -Path (Join-Path $artifactRoot "Packages"), `
-            (Join-Path $artifactRoot "Install-LLMMeter.ps1"), `
+          Compress-Archive -Path (Join-Path $artifactRoot "App\*"), `
             (Join-Path $artifactRoot "README-Windows11.txt") `
             -DestinationPath $zipPath `
             -Force
@@ -121,13 +100,13 @@ jobs:
               --repo $env:GITHUB_REPOSITORY `
               --target $env:GITHUB_SHA `
               --title "LLM Meter $tag" `
-              --notes "Windows 11 preview build. This bundle contains the WinUI dashboard tray app, install script, and test certificate." `
+              --notes "Windows 11 preview build. This archive contains a self-contained unpackaged x64 WinUI dashboard EXE. It requires no MSIX package or certificate installation." `
               --prerelease
           }
           gh release edit $tag `
             --repo $env:GITHUB_REPOSITORY `
             --title "LLM Meter $tag" `
-            --notes "Windows 11 preview build. This bundle contains the WinUI dashboard tray app, install script, and test certificate. It does not register Windows Widgets."
+            --notes "Windows 11 preview build. This archive contains a self-contained unpackaged x64 WinUI dashboard EXE. It requires no MSIX package or certificate installation. OpenAI and Anthropic browser OAuth connections are included; live provider validation remains provider/account dependent."
           $assets = Get-ChildItem $env:ARTIFACT_ROOT -File |
             Where-Object { $_.Extension -in ".zip", ".sha256" }
           foreach ($asset in $assets) {

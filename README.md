@@ -10,9 +10,9 @@ account freshness across multiple accounts.
 ## Current status
 
 - macOS release: `v1.0.0`
-- Windows preview: [`v1.1.0-windows11-tray-preview`](https://github.com/plmjuio1234/llm-meter/releases/tag/v1.1.0-windows11-tray-preview)
+- Windows preview: [`v1.2.0-windows11-exe-preview`](https://github.com/plmjuio1234/llm-meter/releases/tag/v1.2.0-windows11-exe-preview)
 - Platform: macOS 14+ and Windows 11
-- Windows support: WinUI 3 dashboard with a notification-area tray app
+- Windows support: self-contained x64 WinUI 3 EXE with a notification-area tray app
 - Provider access: official APIs only
 
 ## Features
@@ -24,9 +24,10 @@ account freshness across multiple accounts.
 - Account-card ordering and per-account detail windows
 - macOS menu-bar dashboard and WidgetKit snapshot
 
-Credentials stay in the macOS Keychain. The widget reads sanitized shared
-snapshots only. This project does not scrape consumer pages, private console
-pages, browser cookies, or prompt traffic.
+macOS credentials stay in Keychain; Windows credentials use DPAPI CurrentUser.
+The widget and Windows dashboard render sanitized snapshots only. This project
+does not scrape consumer pages, private console pages, browser cookies, or
+prompt traffic.
 
 ## Supported provider surfaces
 
@@ -67,10 +68,10 @@ launch.
 
 ## Windows 11
 
-The Windows port lives under [`Windows/`](Windows/). It uses WinUI 3 for the
-dashboard and stays resident in the Windows 11 taskbar notification area.
-Click the hidden tray icon to show or hide the dashboard. It consumes a
-credential-free normalized snapshot projection.
+The Windows port lives under [`Windows/`](Windows/). It uses a self-contained
+unpackaged x64 WinUI 3 EXE for the dashboard, stays resident in the Windows 11
+taskbar notification area, and supports OpenAI/Anthropic browser PKCE OAuth.
+Click the hidden tray icon to show or hide the dashboard.
 
 See [`Windows/README.md`](Windows/README.md) for Windows 11 prerequisites and
 build commands.
