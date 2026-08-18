@@ -47,17 +47,19 @@ jobs:
           $artifactRoot = $env:ARTIFACT_ROOT
           $publishRoot = Join-Path $artifactRoot "App"
           New-Item -ItemType Directory -Force -Path $publishRoot | Out-Null
-          dotnet publish Windows/src/LLMMeter.App/LLMMeter.App.csproj `
-            --configuration $env:CONFIGURATION `
-            --runtime win-x64 `
-            --self-contained true `
-            --output $publishRoot `
-            -p:Platform=$env:PLATFORM `
-            -p:PlatformTarget=x64 `
-            -p:WindowsPackageType=None `
-            -p:EnableMsixTooling=false `
-            -p:WindowsAppSDKSelfContained=true `
-            -p:PublishSingleFile=false
+          msbuild Windows/src/LLMMeter.App/LLMMeter.App.csproj `
+            /restore `
+            /t:Publish `
+            /p:Configuration=$env:CONFIGURATION `
+            /p:Platform=$env:PLATFORM `
+            /p:PlatformTarget=x64 `
+            /p:RuntimeIdentifier=win-x64 `
+            /p:SelfContained=true `
+            /p:WindowsPackageType=None `
+            /p:EnableMsixTooling=false `
+            /p:WindowsAppSDKSelfContained=true `
+            /p:PublishSingleFile=false `
+            /p:PublishDir="$publishRoot\"
 
           $application = Get-ChildItem $publishRoot -Filter "LLMMeter.App.exe" -File
           if ($null -eq $application) {
