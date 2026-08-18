@@ -21,6 +21,7 @@
       <uap:VisualElements
         AppListEntry="default"
         DisplayName="LLM Meter"
+        BackgroundColor="#071A3D"
         Square150x150Logo="Assets\StoreLogo.png"
         Square44x44Logo="Assets\StoreLogo.png"
         Description="Privacy-first LLM usage monitoring" />
