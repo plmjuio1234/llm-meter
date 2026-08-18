@@ -1,0 +1,27 @@
+# macOS and editor noise
+.DS_Store
+*.swp
+*.swo
+
+# Xcode and SwiftPM user/build state
+DerivedData/
+build/
+**/.build/
+.swiftpm/
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+*.xccheckout
+*.xcscmblueprint
+
+# Local distribution artifacts
+dist/
+*.dmg
+*.dmg.sha256
+
+# Local OMO/Senpi working state and generated project docs
+.omo/
+.ai-docs/
+.senpi/
+docs/
+AGENTS.md
