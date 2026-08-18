@@ -20,9 +20,9 @@ public sealed class WidgetProvider : IWidgetProvider
         Update(widgetContext.Id);
     }
 
-    public void DeleteWidget(string widgetId, string _)
+    public void DeleteWidget(string widgetId, string customState)
     {
-        widgets.TryRemove(widgetId, out _);
+        widgets.TryRemove(widgetId, out var removedContext);
     }
 
     public void OnActionInvoked(WidgetActionInvokedArgs actionInvokedArgs)

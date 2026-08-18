@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
-using LLMMeter.WidgetProvider;
 using Microsoft.Windows.Widgets.Providers;
 using WidgetHelper;
+using Provider = LLMMeter.WidgetProvider.WidgetProvider;
 
 namespace LLMMeter.WidgetProviderHost;
 
@@ -19,7 +19,7 @@ public static class Program
         }
 
         WinRT.ComWrappersSupport.InitializeComWrappers();
-        using var manager = RegistrationManager<WidgetProvider>.RegisterProvider();
+        using var manager = RegistrationManager<Provider>.RegisterProvider();
 
         if (GetConsoleWindow() != IntPtr.Zero)
         {
