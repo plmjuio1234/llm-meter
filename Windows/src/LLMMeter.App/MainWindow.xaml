@@ -62,11 +62,10 @@
 
                 <ItemsControl Grid.Row="2" ItemsSource="{Binding Accounts}">
                     <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
+                            <ItemsPanelTemplate>
                             <ItemsWrapGrid MaximumRowsOrColumns="2"
                                            Orientation="Horizontal"
-                                           HorizontalAlignment="Stretch"
-                                           MaximumWidth="1120" />
+                                           HorizontalAlignment="Stretch" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
