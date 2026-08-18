@@ -5,7 +5,7 @@ namespace LLMMeter.App;
 internal sealed class TrayIconController : IDisposable
 {
     private const int GWLP_WNDPROC = -4;
-    private const int WM_APP = 0x8000;
+    private const uint TRAY_CALLBACK_MESSAGE = 0x8001;
     private const int WM_LBUTTONUP = 0x0202;
     private const int WM_RBUTTONUP = 0x0205;
     private const int WM_NULL = 0x0000;
@@ -20,8 +20,8 @@ internal sealed class TrayIconController : IDisposable
     private const uint TPM_RETURNCMD = 0x0100;
     private const uint MF_SEPARATOR = 0x00000800;
     private const uint MF_STRING = 0x00000000;
-    private const uint OPEN_COMMAND = 1;
-    private const uint EXIT_COMMAND = 2;
+    private const int OPEN_COMMAND = 1;
+    private const int EXIT_COMMAND = 2;
     private const int IDI_APPLICATION = 32512;
 
     private readonly IntPtr windowHandle;
@@ -80,7 +80,7 @@ internal sealed class TrayIconController : IDisposable
         IntPtr wParam,
         IntPtr lParam)
     {
-        if (!disposed && message == WM_APP)
+        if (!disposed && message == TRAY_CALLBACK_MESSAGE)
         {
             var mouseMessage = unchecked((int)lParam.ToInt64());
             if (mouseMessage == WM_LBUTTONUP)
@@ -111,9 +111,9 @@ internal sealed class TrayIconController : IDisposable
 
         try
         {
-            NativeMethods.AppendMenu(menu, MF_STRING, OPEN_COMMAND, "Open LLM Meter");
+            NativeMethods.AppendMenu(menu, MF_STRING, (uint)OPEN_COMMAND, "Open LLM Meter");
             NativeMethods.AppendMenu(menu, MF_SEPARATOR, 0, string.Empty);
-            NativeMethods.AppendMenu(menu, MF_STRING, EXIT_COMMAND, "Exit");
+            NativeMethods.AppendMenu(menu, MF_STRING, (uint)EXIT_COMMAND, "Exit");
             NativeMethods.GetCursorPos(out var cursor);
             NativeMethods.SetForegroundWindow(windowHandle);
             var command = NativeMethods.TrackPopupMenu(
@@ -149,7 +149,7 @@ internal sealed class TrayIconController : IDisposable
             hWnd = windowHandle,
             uID = 1,
             uFlags = flags,
-            uCallbackMessage = WM_APP,
+            uCallbackMessage = TRAY_CALLBACK_MESSAGE,
             hIcon = NativeMethods.LoadIcon(
                 IntPtr.Zero,
                 (IntPtr)IDI_APPLICATION),
