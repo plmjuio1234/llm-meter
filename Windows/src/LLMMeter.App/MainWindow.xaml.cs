@@ -16,7 +16,7 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
         ContentRoot.DataContext = ViewModel;
-        Loaded += async (_, _) => await ViewModel.LoadAsync();
+        ContentRoot.Loaded += async (_, _) => await ViewModel.LoadAsync();
     }
 
     private async void Refresh_Click(object sender, RoutedEventArgs e)
