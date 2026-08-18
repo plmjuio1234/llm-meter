@@ -1,0 +1,661 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		400000000000000000000002 /* LLMUsageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000003 /* LLMUsageApp.swift */; };
+		400000000000000000000003 /* LLMUsageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000006 /* LLMUsageWidget.swift */; };
+		400000000000000000000004 /* LLMUsageAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000009 /* LLMUsageAppTests.swift */; };
+		400000000000000000000010 /* AccountConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000011 /* AccountConnection.swift */; };
+		400000000000000000000011 /* AccountRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000012 /* AccountRegistry.swift */; };
+		400000000000000000000012 /* AccountOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000013 /* AccountOnboardingView.swift */; };
+		400000000000000000000013 /* CredentialVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000014 /* CredentialVault.swift */; };
+		400000000000000000000014 /* SharedSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000015 /* SharedSnapshot.swift */; };
+		400000000000000000000015 /* SnapshotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000016 /* SnapshotStore.swift */; };
+		400000000000000000000016 /* UsageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000017 /* UsageProvider.swift */; };
+		400000000000000000000017 /* AccountStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000018 /* AccountStorageTests.swift */; };
+		400000000000000000000018 /* OpenAIUsageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000019 /* OpenAIUsageProvider.swift */; };
+		400000000000000000000019 /* AnthropicUsageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000020 /* AnthropicUsageProvider.swift */; };
+		400000000000000000000033 /* AdditionalUsageProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000033 /* AdditionalUsageProviders.swift */; };
+		400000000000000000000020 /* OpenAIUsageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000021 /* OpenAIUsageProviderTests.swift */; };
+		400000000000000000000021 /* AnthropicUsageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000022 /* AnthropicUsageProviderTests.swift */; };
+		400000000000000000000022 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000023 /* AppContainer.swift */; };
+		400000000000000000000023 /* RefreshCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000024 /* RefreshCoordinator.swift */; };
+		400000000000000000000024 /* LaunchAtLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000025 /* LaunchAtLoginController.swift */; };
+		400000000000000000000025 /* MenuBarDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000026 /* MenuBarDashboardView.swift */; };
+		400000000000000000000026 /* WidgetSnapshotReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000027 /* WidgetSnapshotReader.swift */; };
+		400000000000000000000027 /* RefreshCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000028 /* RefreshCoordinatorTests.swift */; };
+		400000000000000000000028 /* NotificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000029 /* NotificationCoordinator.swift */; };
+		400000000000000000000029 /* FixtureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000030 /* FixtureData.swift */; };
+		400000000000000000000030 /* NotificationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000031 /* NotificationCoordinatorTests.swift */; };
+		400000000000000000000031 /* FixtureDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000032 /* FixtureDataTests.swift */; };
+		400000000000000000000034 /* AdditionalUsageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000034 /* AdditionalUsageProviderTests.swift */; };
+		400000000000000000000005 /* UsageCore in Frameworks */ = {isa = PBXBuildFile; productRef = 600000000000000000000002 /* UsageCore */; };
+		400000000000000000000006 /* UsageCore in Frameworks */ = {isa = PBXBuildFile; productRef = 600000000000000000000003 /* UsageCore */; };
+		400000000000000000000007 /* UsageCore in Frameworks */ = {isa = PBXBuildFile; productRef = 600000000000000000000004 /* UsageCore */; };
+		400000000000000000000008 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 200000000000000000000010 /* XCTest.framework */; };
+		400000000000000000000009 /* Embed Widget.appex */ = {isa = PBXBuildFile; fileRef = 300000000000000000000003 /* LLMUsageWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		200000000000000000000001 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		200000000000000000000003 /* LLMUsageApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMUsageApp.swift; sourceTree = "<group>"; };
+		200000000000000000000004 /* LLMUsageApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		200000000000000000000005 /* LLMUsageApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LLMUsageApp.entitlements; sourceTree = "<group>"; };
+		200000000000000000000006 /* LLMUsageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMUsageWidget.swift; sourceTree = "<group>"; };
+		200000000000000000000007 /* LLMUsageWidget-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		200000000000000000000008 /* LLMUsageWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LLMUsageWidget.entitlements; sourceTree = "<group>"; };
+		200000000000000000000009 /* LLMUsageAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMUsageAppTests.swift; sourceTree = "<group>"; };
+		200000000000000000000010 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = System/Library/Frameworks/XCTest.framework; sourceTree = SDKROOT; };
+		200000000000000000000011 /* AccountConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountConnection.swift; sourceTree = "<group>"; };
+		200000000000000000000012 /* AccountRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRegistry.swift; sourceTree = "<group>"; };
+		200000000000000000000013 /* AccountOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountOnboardingView.swift; sourceTree = "<group>"; };
+		200000000000000000000014 /* CredentialVault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialVault.swift; sourceTree = "<group>"; };
+		200000000000000000000015 /* SharedSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSnapshot.swift; sourceTree = "<group>"; };
+		200000000000000000000016 /* SnapshotStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotStore.swift; sourceTree = "<group>"; };
+		200000000000000000000017 /* UsageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProvider.swift; sourceTree = "<group>"; };
+		200000000000000000000018 /* AccountStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStorageTests.swift; sourceTree = "<group>"; };
+		200000000000000000000019 /* OpenAIUsageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIUsageProvider.swift; sourceTree = "<group>"; };
+		200000000000000000000020 /* AnthropicUsageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicUsageProvider.swift; sourceTree = "<group>"; };
+		200000000000000000000033 /* AdditionalUsageProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalUsageProviders.swift; sourceTree = "<group>"; };
+		200000000000000000000021 /* OpenAIUsageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIUsageProviderTests.swift; sourceTree = "<group>"; };
+		200000000000000000000022 /* AnthropicUsageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnthropicUsageProviderTests.swift; sourceTree = "<group>"; };
+		200000000000000000000023 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		200000000000000000000024 /* RefreshCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshCoordinator.swift; sourceTree = "<group>"; };
+		200000000000000000000025 /* LaunchAtLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginController.swift; sourceTree = "<group>"; };
+		200000000000000000000026 /* MenuBarDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarDashboardView.swift; sourceTree = "<group>"; };
+		200000000000000000000027 /* WidgetSnapshotReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshotReader.swift; sourceTree = "<group>"; };
+		200000000000000000000028 /* RefreshCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshCoordinatorTests.swift; sourceTree = "<group>"; };
+		200000000000000000000029 /* NotificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCoordinator.swift; sourceTree = "<group>"; };
+		200000000000000000000030 /* FixtureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureData.swift; sourceTree = "<group>"; };
+		200000000000000000000031 /* NotificationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCoordinatorTests.swift; sourceTree = "<group>"; };
+		200000000000000000000032 /* FixtureDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureDataTests.swift; sourceTree = "<group>"; };
+		200000000000000000000034 /* AdditionalUsageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalUsageProviderTests.swift; sourceTree = "<group>"; };
+		300000000000000000000002 /* LLMUsageApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LLMUsageApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		300000000000000000000003 /* LLMUsageWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LLMUsageWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		300000000000000000000004 /* LLMUsageAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = "wrapper.cfbundle"; includeInIndex = 0; path = LLMUsageAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		700000000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				400000000000000000000005 /* UsageCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		700000000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				400000000000000000000006 /* UsageCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		700000000000000000000007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				400000000000000000000007 /* UsageCore in Frameworks */,
+				400000000000000000000008 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		100000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000002 /* Shared */,
+				100000000000000000000003 /* LLMUsageApp */,
+				100000000000000000000004 /* LLMUsageWidget */,
+				100000000000000000000005 /* LLMUsageAppTests */,
+				100000000000000000000006 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		100000000000000000000002 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000007 /* UsageCore */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		100000000000000000000003 /* LLMUsageApp */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000008 /* App */,
+				100000000000000000000020 /* Accounts */,
+				100000000000000000000021 /* Auth */,
+				100000000000000000000022 /* Storage */,
+				100000000000000000000023 /* Providers */,
+				100000000000000000000026 /* Refresh */,
+				100000000000000000000027 /* MenuBar */,
+				100000000000000000000028 /* Notifications */,
+				100000000000000000000029 /* Fixtures */,
+				200000000000000000000004 /* LLMUsageApp-Info.plist */,
+				200000000000000000000005 /* LLMUsageApp.entitlements */,
+			);
+			path = LLMUsageApp;
+			sourceTree = "<group>";
+		};
+		100000000000000000000004 /* LLMUsageWidget */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000009 /* Widget */,
+				200000000000000000000007 /* LLMUsageWidget-Info.plist */,
+				200000000000000000000008 /* LLMUsageWidget.entitlements */,
+			);
+			path = LLMUsageWidget;
+			sourceTree = "<group>";
+		};
+		100000000000000000000005 /* LLMUsageAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000009 /* LLMUsageAppTests.swift */,
+				200000000000000000000018 /* AccountStorageTests.swift */,
+				200000000000000000000021 /* OpenAIUsageProviderTests.swift */,
+				200000000000000000000022 /* AnthropicUsageProviderTests.swift */,
+				200000000000000000000028 /* RefreshCoordinatorTests.swift */,
+				200000000000000000000031 /* NotificationCoordinatorTests.swift */,
+				200000000000000000000032 /* FixtureDataTests.swift */,
+				200000000000000000000034 /* AdditionalUsageProviderTests.swift */,
+			);
+			path = LLMUsageAppTests;
+			sourceTree = "<group>";
+		};
+		100000000000000000000006 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				300000000000000000000002 /* LLMUsageApp.app */,
+				300000000000000000000003 /* LLMUsageWidget.appex */,
+				300000000000000000000004 /* LLMUsageAppTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		100000000000000000000007 /* UsageCore */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000001 /* Package.swift */,
+			);
+			path = UsageCore;
+			sourceTree = "<group>";
+		};
+		100000000000000000000008 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000003 /* LLMUsageApp.swift */,
+				200000000000000000000023 /* AppContainer.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		100000000000000000000009 /* Widget */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000006 /* LLMUsageWidget.swift */,
+				200000000000000000000027 /* WidgetSnapshotReader.swift */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
+		100000000000000000000020 /* Accounts */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000011 /* AccountConnection.swift */,
+				200000000000000000000012 /* AccountRegistry.swift */,
+				200000000000000000000013 /* AccountOnboardingView.swift */,
+			);
+			path = Accounts;
+			sourceTree = "<group>";
+		};
+		100000000000000000000021 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000014 /* CredentialVault.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		100000000000000000000022 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000015 /* SharedSnapshot.swift */,
+				200000000000000000000016 /* SnapshotStore.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		100000000000000000000023 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000017 /* UsageProvider.swift */,
+				200000000000000000000033 /* AdditionalUsageProviders.swift */,
+				100000000000000000000024 /* OpenAI */,
+				100000000000000000000025 /* Anthropic */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		100000000000000000000024 /* OpenAI */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000019 /* OpenAIUsageProvider.swift */,
+			);
+			path = OpenAI;
+			sourceTree = "<group>";
+		};
+		100000000000000000000025 /* Anthropic */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000020 /* AnthropicUsageProvider.swift */,
+			);
+			path = Anthropic;
+			sourceTree = "<group>";
+		};
+		100000000000000000000026 /* Refresh */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000024 /* RefreshCoordinator.swift */,
+				200000000000000000000025 /* LaunchAtLoginController.swift */,
+			);
+			path = Refresh;
+			sourceTree = "<group>";
+		};
+		100000000000000000000027 /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000026 /* MenuBarDashboardView.swift */,
+			);
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
+		100000000000000000000028 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000029 /* NotificationCoordinator.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		100000000000000000000029 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000030 /* FixtureData.swift */,
+			);
+			path = Fixtures;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		100000000000000000000011 /* LLMUsageApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 800000000000000000000002 /* Build configuration list for LLMUsageApp */;
+			buildPhases = (
+				700000000000000000000002 /* Sources */,
+				700000000000000000000005 /* Frameworks */,
+				700000000000000000000009 /* Embed Widget */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				500000000000000000000003 /* TargetDependency */,
+			);
+			name = LLMUsageApp;
+			productName = LLMUsageApp;
+			productReference = 300000000000000000000002 /* LLMUsageApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		100000000000000000000012 /* LLMUsageWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 800000000000000000000003 /* Build configuration list for LLMUsageWidget */;
+			buildPhases = (
+				700000000000000000000003 /* Sources */,
+				700000000000000000000006 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LLMUsageWidget;
+			productName = LLMUsageWidget;
+			productReference = 300000000000000000000003 /* LLMUsageWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		100000000000000000000013 /* LLMUsageAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 800000000000000000000004 /* Build configuration list for LLMUsageAppTests */;
+			buildPhases = (
+				700000000000000000000004 /* Sources */,
+				700000000000000000000007 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				500000000000000000000004 /* TargetDependency */,
+			);
+			name = LLMUsageAppTests;
+			productName = LLMUsageAppTests;
+			productReference = 300000000000000000000004 /* LLMUsageAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		100000000000000000000000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					100000000000000000000011 = { CreatedOnToolsVersion = 26.0; };
+					100000000000000000000012 = { CreatedOnToolsVersion = 26.0; };
+					100000000000000000000013 = { CreatedOnToolsVersion = 26.0; TestTargetID = 100000000000000000000011; };
+				};
+			};
+			buildConfigurationList = 800000000000000000000005 /* Build configuration list for PBXProject */;
+			compatibilityVersion = "Xcode 16.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 100000000000000000000001;
+			packageReferences = (
+				600000000000000000000001 /* XCLocalSwiftPackageReference "UsageCore" */,
+			);
+			productRefGroup = 100000000000000000000006 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				100000000000000000000011 /* LLMUsageApp */,
+				100000000000000000000012 /* LLMUsageWidget */,
+				100000000000000000000013 /* LLMUsageAppTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		700000000000000000000009 /* Embed Widget */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				400000000000000000000009 /* Embed Widget.appex */,
+			);
+			name = "Embed Widget";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		700000000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				400000000000000000000002 /* LLMUsageApp.swift in Sources */,
+				400000000000000000000010 /* AccountConnection.swift in Sources */,
+				400000000000000000000011 /* AccountRegistry.swift in Sources */,
+				400000000000000000000012 /* AccountOnboardingView.swift in Sources */,
+				400000000000000000000013 /* CredentialVault.swift in Sources */,
+				400000000000000000000014 /* SharedSnapshot.swift in Sources */,
+				400000000000000000000015 /* SnapshotStore.swift in Sources */,
+				400000000000000000000016 /* UsageProvider.swift in Sources */,
+				400000000000000000000018 /* OpenAIUsageProvider.swift in Sources */,
+				400000000000000000000019 /* AnthropicUsageProvider.swift in Sources */,
+				400000000000000000000033 /* AdditionalUsageProviders.swift in Sources */,
+				400000000000000000000022 /* AppContainer.swift in Sources */,
+				400000000000000000000023 /* RefreshCoordinator.swift in Sources */,
+				400000000000000000000024 /* LaunchAtLoginController.swift in Sources */,
+				400000000000000000000025 /* MenuBarDashboardView.swift in Sources */,
+				400000000000000000000028 /* NotificationCoordinator.swift in Sources */,
+				400000000000000000000029 /* FixtureData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		700000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				400000000000000000000003 /* LLMUsageWidget.swift in Sources */,
+				400000000000000000000026 /* WidgetSnapshotReader.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		700000000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				400000000000000000000004 /* LLMUsageAppTests.swift in Sources */,
+				400000000000000000000017 /* AccountStorageTests.swift in Sources */,
+				400000000000000000000020 /* OpenAIUsageProviderTests.swift in Sources */,
+				400000000000000000000021 /* AnthropicUsageProviderTests.swift in Sources */,
+				400000000000000000000027 /* RefreshCoordinatorTests.swift in Sources */,
+				400000000000000000000030 /* NotificationCoordinatorTests.swift in Sources */,
+				400000000000000000000031 /* FixtureDataTests.swift in Sources */,
+				400000000000000000000034 /* AdditionalUsageProviderTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		500000000000000000000003 /* TargetDependency */ = {isa = PBXTargetDependency; target = 100000000000000000000012 /* LLMUsageWidget */; };
+		500000000000000000000004 /* TargetDependency */ = {isa = PBXTargetDependency; target = 100000000000000000000011 /* LLMUsageApp */; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		810000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = LLMUsageApp/LLMUsageApp.entitlements;
+				DEFINES_MODULE = YES;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = LLMUsageApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.llmusage.app;
+				PRODUCT_NAME = LLMUsageApp;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		810000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = LLMUsageApp/LLMUsageApp.entitlements;
+				DEFINES_MODULE = YES;
+				INFOPLIST_FILE = LLMUsageApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.llmusage.app;
+				PRODUCT_NAME = LLMUsageApp;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		810000000000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = LLMUsageWidget/LLMUsageWidget.entitlements;
+				DEFINES_MODULE = YES;
+				INFOPLIST_FILE = LLMUsageWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.llmusage.app.widget;
+				PRODUCT_NAME = LLMUsageWidget;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		810000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = LLMUsageWidget/LLMUsageWidget.entitlements;
+				DEFINES_MODULE = YES;
+				INFOPLIST_FILE = LLMUsageWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.llmusage.app.widget;
+				PRODUCT_NAME = LLMUsageWidget;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		810000000000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				DEFINES_MODULE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.llmusage.app.tests;
+				PRODUCT_NAME = LLMUsageAppTests;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LLMUsageApp.app/Contents/MacOS/LLMUsageApp";
+			};
+			name = Debug;
+		};
+		810000000000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				DEFINES_MODULE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.llmusage.app.tests;
+				PRODUCT_NAME = LLMUsageAppTests;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LLMUsageApp.app/Contents/MacOS/LLMUsageApp";
+			};
+			name = Release;
+		};
+		810000000000000000000009 /* Project Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		810000000000000000000010 /* Project Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		800000000000000000000002 /* Build configuration list for LLMUsageApp */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				810000000000000000000003 /* Debug */,
+				810000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		800000000000000000000003 /* Build configuration list for LLMUsageWidget */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				810000000000000000000005 /* Debug */,
+				810000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		800000000000000000000004 /* Build configuration list for LLMUsageAppTests */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				810000000000000000000007 /* Debug */,
+				810000000000000000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		800000000000000000000005 /* Build configuration list for PBXProject */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				810000000000000000000009 /* Project Debug */,
+				810000000000000000000010 /* Project Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		600000000000000000000001 /* XCLocalSwiftPackageReference "UsageCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Shared/UsageCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		600000000000000000000002 /* UsageCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 600000000000000000000001 /* XCLocalSwiftPackageReference "UsageCore" */;
+			productName = UsageCore;
+		};
+		600000000000000000000003 /* UsageCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 600000000000000000000001 /* XCLocalSwiftPackageReference "UsageCore" */;
+			productName = UsageCore;
+		};
+		600000000000000000000004 /* UsageCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 600000000000000000000001 /* XCLocalSwiftPackageReference "UsageCore" */;
+			productName = UsageCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 100000000000000000000000 /* Project object */;
+}
