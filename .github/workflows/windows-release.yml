@@ -48,17 +48,10 @@ jobs:
             -FriendlyName "LLM Meter Windows 11 test signing" `
             -KeyUsage DigitalSignature `
             -CertStoreLocation Cert:\CurrentUser\My
-          $password = ConvertTo-SecureString `
-            -String "LLMMeterWindows11TestOnly" `
-            -Force `
-            -AsPlainText
-          $pfxPath = Join-Path $env:RUNNER_TEMP "LLMMeter.cer.pfx"
-          Export-PfxCertificate -Cert $certificate -FilePath $pfxPath -Password $password | Out-Null
           Export-Certificate `
             -Cert $certificate `
             -FilePath (Join-Path $artifactRoot "LLMMeter-TestCertificate.cer") | Out-Null
-          "PACKAGE_CERT_PATH=$pfxPath" >> $env:GITHUB_ENV
-          "PACKAGE_CERT_PASSWORD=LLMMeterWindows11TestOnly" >> $env:GITHUB_ENV
+          "PACKAGE_CERT_THUMBPRINT=$($certificate.Thumbprint)" >> $env:GITHUB_ENV
 
       - name: Build packaged dashboard
         shell: pwsh
@@ -71,8 +64,7 @@ jobs:
             /p:GenerateAppxPackageOnBuild=true `
             /p:WindowsAppSDKSelfContained=true `
             /p:AppxPackageSigningEnabled=true `
-            /p:PackageCertificateKeyFile="$env:PACKAGE_CERT_PATH" `
-            /p:PackageCertificatePassword="$env:PACKAGE_CERT_PASSWORD" `
+            /p:PackageCertificateThumbprint="$env:PACKAGE_CERT_THUMBPRINT" `
             /p:AppxPackageDir="$env:ARTIFACT_ROOT\App\"
 
       - name: Build packaged widget provider
@@ -86,8 +78,7 @@ jobs:
             /p:GenerateAppxPackageOnBuild=true `
             /p:WindowsAppSDKSelfContained=true `
             /p:AppxPackageSigningEnabled=true `
-            /p:PackageCertificateKeyFile="$env:PACKAGE_CERT_PATH" `
-            /p:PackageCertificatePassword="$env:PACKAGE_CERT_PASSWORD" `
+            /p:PackageCertificateThumbprint="$env:PACKAGE_CERT_THUMBPRINT" `
             /p:AppxPackageDir="$env:ARTIFACT_ROOT\WidgetProvider\"
 
       - name: Assemble installable Windows bundle
