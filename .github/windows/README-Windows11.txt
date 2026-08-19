@@ -1,6 +1,6 @@
 LLM Meter Windows 11 standalone preview
 
-Release: https://github.com/plmjuio1234/llm-meter/releases/tag/v1.2.0-windows11-exe-preview
+Release: https://github.com/plmjuio1234/llm-meter/releases/tag/v1.2.1-windows11-tray-fix-preview
 
 1. Extract the complete archive to a folder.
 2. Run `LLMMeter.App.exe`.
@@ -25,3 +25,10 @@ After installation:
 OAuth access and refresh tokens are encrypted with the current Windows user's
 DPAPI and are never written to the usage snapshot. The app does not scrape
 provider pages or read browser cookies.
+
+If Windows rejects native tray registration, the dashboard stays visible
+instead of disappearing. Check:
+
+   %LocalAppData%\LLMMeter\startup.log
+
+for the redacted startup error.

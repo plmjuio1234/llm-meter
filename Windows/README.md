@@ -43,6 +43,9 @@ the complete archive and run `LLMMeter.App.exe`; no MSIX certificate import or
 PowerShell installer is required. The app starts resident in the notification
 area; Windows may place it behind the taskbar hidden-icons arrow according to
 the user's notification-area settings.
+The app activates the dashboard window before registering the native tray icon.
+If Windows rejects tray registration, the dashboard remains visible and writes
+a redacted diagnostic to `%LocalAppData%\\LLMMeter\\startup.log`.
 
 Use **Connect OpenAI** or **Connect Claude** to start browser OAuth, then
 **Refresh** to request current usage. The release is unsigned, so SmartScreen

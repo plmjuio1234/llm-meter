@@ -10,7 +10,7 @@ account freshness across multiple accounts.
 ## Current status
 
 - macOS release: `v1.0.0`
-- Windows preview: [`v1.2.0-windows11-exe-preview`](https://github.com/plmjuio1234/llm-meter/releases/tag/v1.2.0-windows11-exe-preview)
+- Windows preview: [`v1.2.1-windows11-tray-fix-preview`](https://github.com/plmjuio1234/llm-meter/releases/tag/v1.2.1-windows11-tray-fix-preview)
 - Platform: macOS 14+ and Windows 11
 - Windows support: self-contained x64 WinUI 3 EXE with a notification-area tray app
 - Provider access: official APIs only

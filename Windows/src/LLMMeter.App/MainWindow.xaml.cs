@@ -15,14 +15,11 @@ public sealed partial class MainWindow : Window
 {
     public DashboardViewModel ViewModel { get; } = new();
     public new DispatcherQueue DispatcherQueue => ContentRoot.DispatcherQueue;
-    internal IntPtr WindowHandle => windowHandle;
-
-    private readonly IntPtr windowHandle;
+    internal IntPtr WindowHandle => WindowNative.GetWindowHandle(this);
 
     public MainWindow()
     {
         InitializeComponent();
-        windowHandle = WindowNative.GetWindowHandle(this);
         ContentRoot.DataContext = ViewModel;
         _ = ViewModel.LoadAsync();
     }
@@ -41,14 +38,15 @@ public sealed partial class MainWindow : Window
 
     public void ShowFromTray()
     {
-        NativeMethods.ShowWindow(windowHandle, NativeMethods.SW_RESTORE);
+        var handle = WindowHandle;
+        NativeMethods.ShowWindow(handle, NativeMethods.SW_RESTORE);
         Activate();
-        NativeMethods.SetForegroundWindow(windowHandle);
+        NativeMethods.SetForegroundWindow(handle);
     }
 
     public void HideToTray()
     {
-        NativeMethods.ShowWindow(windowHandle, NativeMethods.SW_HIDE);
+        NativeMethods.ShowWindow(WindowHandle, NativeMethods.SW_HIDE);
     }
 
     private async void Refresh_Click(object sender, RoutedEventArgs e)

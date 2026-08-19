@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace LLMMeter.App;
@@ -47,14 +48,18 @@ internal sealed class TrayIconController : IDisposable
 
         if (previousWndProc == IntPtr.Zero)
         {
-            throw new InvalidOperationException("Unable to attach the tray message handler.");
+            throw new Win32Exception(
+                Marshal.GetLastWin32Error(),
+                "Unable to attach the tray message handler.");
         }
 
         var data = CreateNotifyIconData(NIF_MESSAGE | NIF_ICON | NIF_TIP);
         if (!NativeMethods.Shell_NotifyIcon(NIM_ADD, ref data))
         {
             RestoreWindowProcedure();
-            throw new InvalidOperationException("Unable to create the notification-area icon.");
+            throw new Win32Exception(
+                Marshal.GetLastWin32Error(),
+                "Unable to create the notification-area icon.");
         }
 
         data.uVersion = NOTIFYICON_VERSION_4;
@@ -201,13 +206,13 @@ internal sealed class TrayIconController : IDisposable
 
     private static class NativeMethods
     {
-        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool Shell_NotifyIcon(
             uint message,
             ref NotifyIconData data);
 
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern IntPtr SetWindowLongPtr(
             IntPtr hWnd,
             int nIndex,
@@ -221,7 +226,7 @@ internal sealed class TrayIconController : IDisposable
             IntPtr wParam,
             IntPtr lParam);
 
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern IntPtr LoadIcon(
             IntPtr hInstance,
             IntPtr lpIconName);
