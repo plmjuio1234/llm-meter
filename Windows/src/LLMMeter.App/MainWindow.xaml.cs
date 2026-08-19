@@ -26,7 +26,7 @@ public sealed partial class MainWindow : Window
 
     public void ToggleFromTray()
     {
-        if (NativeMethods.IsWindowVisible(windowHandle))
+        if (NativeMethods.IsWindowVisible(WindowHandle))
         {
             HideToTray();
         }
