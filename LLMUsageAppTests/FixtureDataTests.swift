@@ -23,4 +23,36 @@ final class FixtureDataTests: XCTestCase {
         XCTAssertNil(data.range(of: Data("fixture-openai-secret".utf8)))
         XCTAssertNil(data.range(of: Data("fixture-anthropic-secret".utf8)))
     }
+
+    @MainActor
+    func testDashboardFixtureInstallationReloadsItsSnapshot() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("dashboard-fixture-\(UUID().uuidString)", isDirectory: true)
+        let vault = FixtureCredentialStore()
+        let registry = AccountRegistry(vault: vault)
+        let snapshotStore = SnapshotStore(containerURL: root)
+        let coordinator = RefreshCoordinator(
+            registry: registry,
+            vault: vault,
+            snapshotStore: snapshotStore,
+            providers: [:],
+            client: URLSessionProviderHTTPClient(),
+            now: { Date() },
+            reloadTimelines: {}
+        )
+        let dashboard = DashboardModel(
+            registry: registry,
+            coordinator: coordinator,
+            snapshotStore: snapshotStore,
+            fixtureMode: true
+        )
+
+        await dashboard.installFixtures()
+
+        XCTAssertEqual(dashboard.snapshot.accounts.count, 2)
+        XCTAssertEqual(
+            DashboardQuickStatus(snapshot: dashboard.snapshot).healthyAccounts,
+            1
+        )
+    }
 }

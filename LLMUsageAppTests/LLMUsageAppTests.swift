@@ -9,6 +9,59 @@ final class LLMUsageAppTests: XCTestCase {
         XCTAssertEqual("LLM Usage", "LLM Usage")
     }
 
+    func testQuickStatusCountsReadyAttentionAndDisabledAccounts() {
+        let freshAccountID = AccountID()
+        let staleAccountID = AccountID()
+        let noDataAccountID = AccountID()
+        let disabledAccountID = AccountID()
+        let snapshot = SharedSnapshot(
+            generatedAt: Date(timeIntervalSince1970: 1_700_000_000),
+            accounts: [
+                SharedAccountSnapshot(
+                    accountID: freshAccountID,
+                    provider: .openAI,
+                    surface: .consumerSubscription,
+                    label: "Fresh",
+                    isEnabled: true,
+                    usage: quickStatusUsage(accountID: freshAccountID, state: .fresh)
+                ),
+                SharedAccountSnapshot(
+                    accountID: staleAccountID,
+                    provider: .anthropic,
+                    surface: .consumerSubscription,
+                    label: "Stale",
+                    isEnabled: true,
+                    usage: quickStatusUsage(accountID: staleAccountID, state: .stale)
+                ),
+                SharedAccountSnapshot(
+                    accountID: noDataAccountID,
+                    provider: .openRouter,
+                    surface: .api,
+                    label: "No data",
+                    isEnabled: true
+                ),
+                SharedAccountSnapshot(
+                    accountID: disabledAccountID,
+                    provider: .deepSeek,
+                    surface: .api,
+                    label: "Disabled",
+                    isEnabled: false
+                )
+            ]
+        )
+
+        let status = DashboardQuickStatus(snapshot: snapshot)
+
+        XCTAssertEqual(status.totalAccounts, 4)
+        XCTAssertEqual(status.activeAccounts, 3)
+        XCTAssertEqual(status.healthyAccounts, 1)
+        XCTAssertEqual(status.attentionAccounts, 2)
+        XCTAssertEqual(status.disabledAccounts, 1)
+        XCTAssertEqual(status.state, .attention)
+        XCTAssertEqual(status.title, "2 accounts need attention")
+        XCTAssertEqual(status.detail, "1 ready · 3 active · 1 disabled")
+    }
+
     func testOAuthRefreshRotatesAccessTokenAndPreservesAccountMetadata() async throws {
         let client = TokenFixtureClient(
             data: Data(
@@ -144,6 +197,22 @@ final class LLMUsageAppTests: XCTestCase {
         XCTAssertEqual(AccountDetailPresentation.remoteAccountID(account), "remote-account")
         XCTAssertEqual(AccountDetailPresentation.lastRefresh(account), fetchedAt)
     }
+}
+
+private func quickStatusUsage(
+    accountID: AccountID,
+    state: FreshnessState
+) -> UsageSnapshot {
+    UsageSnapshot(
+        accountID: accountID,
+        provider: .openAI,
+        surface: .consumerSubscription,
+        freshness: Freshness(
+            fetchedAt: Date(timeIntervalSince1970: 1_700_000_000),
+            state: state
+        ),
+        metrics: []
+    )
 }
 
 final class QuotaPresentationTests: XCTestCase {

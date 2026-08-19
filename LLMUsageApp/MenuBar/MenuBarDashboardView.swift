@@ -72,6 +72,7 @@ public final class DashboardModel: ObservableObject {
                 snapshotStore: snapshotStore
             )
             fixtureInstalled = true
+            await load()
         } catch {
             lastError = "Fixture data could not be installed."
         }
@@ -285,6 +286,13 @@ public struct MenuBarDashboardView: View {
                     .stroke(DashboardPalette.border)
             }
 
+            if !model.snapshot.accounts.isEmpty {
+                DashboardQuickStatusView(
+                    snapshot: model.snapshot,
+                    isRefreshing: model.isRefreshing
+                )
+            }
+
             if model.snapshot.accounts.isEmpty {
                 ContentUnavailableView(
                     "No accounts",
@@ -416,6 +424,129 @@ private extension DashboardModel {
 private enum DashboardPalette {
     static let border = Color.white.opacity(0.24)
     static let track = Color.primary.opacity(0.10)
+}
+
+enum DashboardQuickStatusState: Equatable {
+    case empty
+    case noActiveAccounts
+    case healthy
+    case attention
+}
+
+struct DashboardQuickStatus: Equatable {
+    let totalAccounts: Int
+    let activeAccounts: Int
+    let healthyAccounts: Int
+    let attentionAccounts: Int
+    let disabledAccounts: Int
+
+    init(snapshot: SharedSnapshot) {
+        totalAccounts = snapshot.accounts.count
+        activeAccounts = snapshot.accounts.filter(\.isEnabled).count
+        disabledAccounts = snapshot.accounts.filter { !$0.isEnabled }.count
+        healthyAccounts = snapshot.accounts.filter { account in
+            guard account.isEnabled, let usage = account.usage else { return false }
+            return usage.failure == nil && usage.freshness.state == .fresh
+        }.count
+        attentionAccounts = activeAccounts - healthyAccounts
+    }
+
+    var state: DashboardQuickStatusState {
+        if totalAccounts == 0 { return .empty }
+        if activeAccounts == 0 { return .noActiveAccounts }
+        return attentionAccounts == 0 ? .healthy : .attention
+    }
+
+    var title: String {
+        switch state {
+        case .empty:
+            return "No accounts"
+        case .noActiveAccounts:
+            return "No active accounts"
+        case .healthy:
+            return "All active accounts ready"
+        case .attention:
+            let plural = attentionAccounts == 1 ? "" : "s"
+            let verb = attentionAccounts == 1 ? "needs" : "need"
+            return "\(attentionAccounts) account\(plural) \(verb) attention"
+        }
+    }
+
+    var detail: String {
+        var parts = ["\(healthyAccounts) ready", "\(activeAccounts) active"]
+        if disabledAccounts > 0 {
+            parts.append("\(disabledAccounts) disabled")
+        }
+        return parts.joined(separator: " · ")
+    }
+
+    var symbolName: String {
+        switch state {
+        case .empty, .noActiveAccounts:
+            return "circle.dashed"
+        case .healthy:
+            return "checkmark.circle.fill"
+        case .attention:
+            return "exclamationmark.triangle.fill"
+        }
+    }
+}
+
+private struct DashboardQuickStatusView: View {
+    let snapshot: SharedSnapshot
+    let isRefreshing: Bool
+
+    private var status: DashboardQuickStatus {
+        DashboardQuickStatus(snapshot: snapshot)
+    }
+
+    private var tint: Color {
+        switch status.state {
+        case .empty, .noActiveAccounts:
+            return .secondary
+        case .healthy:
+            return .green
+        case .attention:
+            return .orange
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: status.symbolName)
+                .foregroundStyle(tint)
+                .font(.title3)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(status.title)
+                    .font(.subheadline.weight(.semibold))
+                HStack(spacing: 4) {
+                    Text(status.detail)
+                    Text("·")
+                    Text(snapshot.generatedAt, style: .relative)
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 8)
+
+            if isRefreshing {
+                ProgressView()
+                    .controlSize(.small)
+                    .accessibilityLabel("Refreshing")
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(tint.opacity(0.10), in: RoundedRectangle(cornerRadius: 10))
+        .overlay {
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(tint.opacity(0.35))
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(status.title). \(status.detail)")
+    }
 }
 
 enum AccountDetailPresentation {

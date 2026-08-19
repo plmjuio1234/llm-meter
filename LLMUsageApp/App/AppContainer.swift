@@ -72,13 +72,13 @@ final class AppContainer: ObservableObject {
         )
 
         Task { @MainActor in
+            if fixtureMode {
+                await dashboard.installFixtures()
+            }
             do {
                 try await notificationCoordinator.requestAuthorization()
             } catch {
                 dashboard.recordError("Notification permission is unavailable.")
-            }
-            if fixtureMode {
-                await dashboard.installFixtures()
             }
         }
     }
